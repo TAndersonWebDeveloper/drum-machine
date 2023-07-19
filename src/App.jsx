@@ -1,98 +1,69 @@
 import { GlobalStyle } from "./globalStyles";
 import styled from "styled-components";
+import { keys } from "./keys";
+import DrumPadButton from "./DrumPadButton";
+import Title from "./Title";
+import { createContext, useState } from "react";
 
-const DrumContainer = styled.div``;
+const DrumContainer = styled.div`
+  width: 700px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border: 5px solid red;
+  background-color: #bbb;
+`;
 
-const Display = styled.div``;
+const Display = styled.div`
+  width: 250px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+`;
 
-const DrumPad = styled.div``;
-
-const Container = styled.div``;
-
+const Container = styled.div`
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  background-color: #222;
+`;
+export const KeyContext = createContext();
 function App() {
-  const handleClick = (e) => {
-    const audio = document.getElementById(e.target.innerText);
-    audio.play();
-  };
+  const [activeKey, setActiveKey] = useState(null);
 
   return (
-    <>
+    <KeyContext.Provider
+      value={{
+        activeKey,
+        setActiveKey,
+      }}
+    >
       <GlobalStyle />
       <Container>
         <DrumContainer id="drum-machine">
           <Display id="display">
-            <DrumPad
-              id="Q"
-              src="https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"
-              className="drum-pad"
-            >
-              <audio
-                onClick={handleClick}
-                src="https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"
-              ></audio>
-              "Q"
-            </DrumPad>
-            <DrumPad
-              id="W"
-              src="https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3"
-              className="drum-pad"
-            >
-              W
-            </DrumPad>
-            <DrumPad
-              id="E"
-              src="https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3"
-              className="drum-pad"
-            >
-              E
-            </DrumPad>
-            <DrumPad
-              id="A"
-              src="https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3"
-              className="drum-pad"
-            >
-              A
-            </DrumPad>
-            <DrumPad
-              id="S"
-              src="https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3"
-              className="drum-pad"
-            >
-              S
-            </DrumPad>
-            <DrumPad
-              id="D"
-              src="https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3"
-              className="drum-pad"
-            >
-              D
-            </DrumPad>
-            <DrumPad
-              id="Z"
-              src="https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3"
-              className="drum-pad"
-            >
-              Z
-            </DrumPad>
-            <DrumPad
-              id="X"
-              src="https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3"
-              className="drum-pad"
-            >
-              X
-            </DrumPad>
-            <DrumPad
-              id="C"
-              src="https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3"
-              className="drum-pad"
-            >
-              C
-            </DrumPad>
+            {keys.map((key) => {
+              return (
+                <DrumPadButton
+                  key={key.name}
+                  keykey={key.key}
+                  keyCode={key.keyCode}
+                  url={key.url}
+                  name={key.name}
+                />
+              );
+            })}
           </Display>
+          <Title activeKey={activeKey} />
         </DrumContainer>
       </Container>
-      <h1>hello</h1>
-    </>
+    </KeyContext.Provider>
   );
 }
 
